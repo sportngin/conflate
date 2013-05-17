@@ -18,5 +18,9 @@ module Conflate
         subject.perform
       end
     end
+
+    context "#parse_config filename" do
+      pending
+    end
   end
 end
