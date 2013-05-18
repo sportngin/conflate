@@ -45,7 +45,7 @@ module Conflate
     #
     # path - Path the directory containing YAML configs (e.g., Rails.root.join("config"))
     def parse_config(yaml_path)
-      YAML.load_file yaml_path
+      YAML.load ERB.new(File.read(yaml_path)).result
     rescue StandardError, SyntaxError => e
       {}
     end

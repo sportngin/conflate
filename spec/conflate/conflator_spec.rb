@@ -35,22 +35,26 @@ module Conflate
 
     context "#parse_config filename" do
 
-      let(:hash) { {foo: "bar"} }
-      let(:yaml) { "some_file.yml" }
+      let(:base) { File.expand_path File.join(__FILE__, "../../support/specific_examples") }
+      let(:basic_hash) { File.join base, "hash.yml" }
+      let(:invalid) { File.join base, "invalid.yml" }
+      let(:missing) { File.join base, "missing.yml" }
+      let(:erb) { File.join base, "erb.yml" }
 
       it "reads a hash from the YAML file" do
-        YAML.should_receive(:load_file).with(yaml) { hash }
-        expect(subject.send(:parse_config, yaml)).to eq hash
-      end
-
-      it "gracefully handles a missing file" do
-        YAML.should_receive(:load_file).and_raise(Errno::ENOENT)
-        expect(subject.send(:parse_config, yaml)).to eq Hash.new
+        expect(subject.send(:parse_config, basic_hash)).to eq({"foo" => "bar"})
       end
 
       it "gracefully handles invalid YAML" do
-        YAML.should_receive(:load_file).and_raise(SyntaxError)
-        expect(subject.send(:parse_config, yaml)).to eq Hash.new
+        expect(subject.send(:parse_config, invalid)).to eq({})
+      end
+
+      it "gracefully handles a missing file" do
+        expect(subject.send(:parse_config, missing)).to eq({})
+      end
+
+      it "parses ERB in the YAML file" do
+        expect(subject.send(:parse_config, erb)).to eq({"foo" => "BAR"})
       end
 
     end
