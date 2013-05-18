@@ -24,7 +24,7 @@ module Conflate
 
     # Public: Process the configuration
     def perform
-      Dir.glob(File.join path, "*.{yml,yaml}") do |filename|
+      Dir.glob(File.join path, "*.yml") do |filename|
         apply_config filename
       end
     end
