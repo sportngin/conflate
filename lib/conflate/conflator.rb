@@ -1,3 +1,5 @@
+require "yaml"
+
 # Scans for YAML files in the config directory and parses them for
 # configuration values. For example, imagine the file below:
 #
@@ -23,8 +25,30 @@ module Conflate
     # Public: Process the configuration
     def perform
       Dir.glob(File.join path, "*.{yml,yaml}") do |filename|
-        parse_config filename
+        apply_config filename
       end
     end
+
+    # Private: Apply config entries from the given YAML file
+    #
+    # path - Path the directory containing YAML configs (e.g., Rails.root.join("config"))
+    def apply_config(yaml_path)
+      parse_config(path).each do |key, value|
+        config.public_send("#{key}=", value)
+      end
+    end
+    private :apply_config
+
+    # Private: Parse the given YAML file, handling any problems
+    #
+    # Returns the object stored in the YAML file, presumed to be a Hash
+    #
+    # path - Path the directory containing YAML configs (e.g., Rails.root.join("config"))
+    def parse_config(yaml_path)
+      YAML.load_file path
+    rescue StandardError, SyntaxError
+      {}
+    end
+    private :parse_config
   end
 end
