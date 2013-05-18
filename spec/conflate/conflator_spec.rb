@@ -28,8 +28,7 @@ module Conflate
 
       it "parses the given path and applies its keys and values to the config object" do
         subject.should_receive(:parse_config).with(yaml) { hash }
-        config.should_receive(:foo=).with("bar")
-        config.should_receive(:bing=).with("bang")
+        config.should_receive("some_file=").with hash
         subject.send(:apply_config, yaml)
       end
 

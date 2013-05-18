@@ -33,9 +33,9 @@ module Conflate
     #
     # path - Path the directory containing YAML configs (e.g., Rails.root.join("config"))
     def apply_config(yaml_path)
-      parse_config(yaml_path).each do |key, value|
-        config.public_send("#{key}=", value)
-      end
+      # 'config/foo.yml' to 'foo'
+      namespace = File.basename(yaml_path, ".yml")
+      config.public_send("#{namespace}=", parse_config(yaml_path))
     end
     private :apply_config
 
@@ -47,7 +47,6 @@ module Conflate
     def parse_config(yaml_path)
       YAML.load_file yaml_path
     rescue StandardError, SyntaxError => e
-      puts e.message
       {}
     end
     private :parse_config
