@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'conflate/version'
 
 authors = {
-  "Patrick Byrne" => "patrick.byrne@sportngin.com".
+  "Patrick Byrne" => "patrick.byrne@sportngin.com",
 }
 
 Gem::Specification.new do |spec|
@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.version       = Conflate::VERSION
   spec.authors       = authors.keys
   spec.email         = authors.values
-  spec.description   = %q{Load YAML files in your config directory into the Rails.application.config}
+  spec.description   = %q{Load YAML files in your config directory into the Rails.application.config.}
   spec.summary       = %q{Load YAML files in your config directory into the Rails.application.config.}
   spec.homepage      = "https://github.com/sportngin/conflate"
   spec.license       = "MIT"
