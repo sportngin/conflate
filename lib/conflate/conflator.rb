@@ -24,9 +24,17 @@ module Conflate
 
     # Public: Process the configuration
     def perform
-      Dir.glob(File.join path, "*.yml") do |filename|
+      config_paths.each do |filename|
         Conflation.new(filename, config).apply
       end
     end
+
+    # Private: The config files in the given path
+    #
+    # Returns an Array of Strings containing paths
+    def config_paths
+      Dir.glob(File.join path, "*.yml")
+    end
+    private :config_paths
   end
 end
