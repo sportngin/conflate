@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sportngin/conflate.png)](https://travis-ci.org/sportngin/conflate)
+
 Conflate
 ========
 
