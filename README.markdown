@@ -6,37 +6,45 @@ Conflate
 
 Load YAML files in your config directory into the Rails.application.config.
 
-Example
--------
-
-Let's suppose you have a file 'config/foo.yml', with the following contents:
-
-```yml
-thing1: "qwerty"
-thing2: "asdf
-```
-
-With Conflate, you can load this information into the `Rails.application.config` object like so:
-
-```ruby
-Rails.application.config.foo.thing1
-# => "qwerty"
-Rails.application.config.foo.thing2
-# => "asdf"
-```
-
-Use this information in your application or initializers.
+If you're using Rails, you probably want to use [conflate-rails], which automatically loads YAML files from config/ into Rails.application.config.
 
 Usage
 -----
 
-Supply a path to a directory containing YAML files to read, as well as a config
-object to put the entries into. For example, do the following for a Rails app:
+Let's suppose you have a file 'config/statsd.yml', with the following contents:
+
+```yml
+# statsd.yml
+host: "localhost"
+port: 8125
+```
+
+With Conflate, load this information (and any other YAML file in your config directory) like so.
+
+```ruby
+settings = OpenStruct.new
+Conflate::Conflator.new("config", settings).perform
+settings.stats
+# => {"host" => "localhost", "port" => 8125}
+```
+
+The [conflate-rails] gem does the following for you in a Rails app.
 
 ```ruby
 Conflate::Conflator.new(Rails.root.join("config"), Rails.application.config).perform
+Rails.application.config.statsd
+# => {"host" => "localhost", "port" => 8125}
 ```
 
-Or, use the [conflate-rails] gem instead, which does this automatically before running initializers.
+Around the Web
+--------------
+
+* [conflate on GitHub][conflate]
+* [conflate on RubyGems][conflate-gem]
+* [conflate-rails on GitHub][conflate-rails]
+* [conflate-rails on RubyGems][conflate-rails-gem]
 
 [conflate-rails]:https://github.com/sportngin/conflate-rails
+[conflate-rails-gem]:https://rubygems.org/gems/conflate-rails
+[conflate]:https://github.com/sportngin/conflate
+[conflate-gem]:https://rubygems.org/gems/conflate
