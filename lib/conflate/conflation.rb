@@ -17,7 +17,11 @@ module Conflate
 
     # Public: Add the contents of the YAML file to the config object
     def apply
-      config_object.public_send "#{name}=", data
+      if config_object.public_send(name).nil?
+        config_object.public_send "#{name}=", data
+      else
+        warn "#{name} already contains some information, so skipping conflating it with the contents of #{yaml_path}"
+      end
     end
 
     # Public: The name of the conflation, based on the YAML file name
