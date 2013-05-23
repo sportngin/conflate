@@ -21,7 +21,7 @@ module Conflate
         # doing this to properly handle the slightly different behaviors of
         # OpenStruct (which does respond to unassigned attributes) or the
         # Rails.application.config object (which doesn't)
-        warn "#{name} already contains some information, so skipping conflating it with the contents of #{yaml_path}"
+        warn "#{config_object.class} already has a #{config_object.public_send(name).class} for the key '#{name}'. Skipping conflating it with the contents of #{File.basename yaml_path}."
         return # so don't set it
       end
 
