@@ -27,8 +27,22 @@ module Conflate
         })
       end
 
-      it "applies the values in the YAML file to the config object" do
+      it "applies the values in the YAML file if the config object does not have an attribute of that name" do
+        # bare stub object, so has no attributes, certainly not `subject.name`
         config_object.should_receive("#{subject.name}=").with(subject.send(:data))
+        subject.apply
+      end
+
+      it "applies the values in the YAML file to the config object if it has the attribute but the value is nil" do
+        config_object.stub(subject.name) { nil }
+        config_object.should_receive("#{subject.name}=").with(subject.send(:data))
+        subject.apply
+      end
+
+      it "does not apply the value if the config object already has a value at that key" do
+        config_object.stub(subject.name) { stub(:existing_data) }
+        config_object.should_not_receive("#{subject.name}=")
+        subject.should_receive(:warn)
         subject.apply
       end
 
@@ -69,6 +83,7 @@ module Conflate
         subject.yaml_path = erb
         expect(subject.send(:data)).to eq({"foo" => "BAR"})
       end
+
     end
   end
 end
