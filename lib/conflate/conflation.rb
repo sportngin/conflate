@@ -17,11 +17,15 @@ module Conflate
 
     # Public: Add the contents of the YAML file to the config object
     def apply
-      if config_object.public_send(name).nil?
-        config_object.public_send "#{name}=", data
-      else
+      if config_object.respond_to?(name) && !config_object.public_send(name).nil?
+        # doing this to properly handle the slightly different behaviors of
+        # OpenStruct (which does respond to unassigned attributes) or the
+        # Rails.application.config object (which doesn't)
         warn "#{name} already contains some information, so skipping conflating it with the contents of #{yaml_path}"
+        return # so don't set it
       end
+
+      config_object.public_send "#{name}=", data
     end
 
     # Public: The name of the conflation, based on the YAML file name

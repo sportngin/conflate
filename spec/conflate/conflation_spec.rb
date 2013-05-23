@@ -27,7 +27,13 @@ module Conflate
         })
       end
 
-      it "applies the values in the YAML file to the config object" do
+      it "applies the values in the YAML file if the config object does not have an attribute of that name" do
+        # bare stub object, so has no attributes, certainly not `subject.name`
+        config_object.should_receive("#{subject.name}=").with(subject.send(:data))
+        subject.apply
+      end
+
+      it "applies the values in the YAML file to the config object if it has the attribute but the value is nil" do
         config_object.stub(subject.name) { nil }
         config_object.should_receive("#{subject.name}=").with(subject.send(:data))
         subject.apply
